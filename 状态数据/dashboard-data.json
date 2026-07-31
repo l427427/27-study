@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-07-31T15:51:13.174426",
+  "overview": {
+    "cycle_title": "27考研：408+数二+英二+政治",
+    "current_day": 0,
+    "total_days": 148,
+    "goal_summary": "2026年12月底考研上岸。5阶段148天全程规划。"
+  },
+  "weekly_checkin": [
+    {
+      "date": "2026-07-25",
+      "day_of_week": "Sat",
+      "actual_minutes": 0,
+      "status": "absent"
+    },
+    {
+      "date": "2026-07-26",
+      "day_of_week": "Sun",
+      "actual_minutes": 0,
+      "status": "absent"
+    },
+    {
+      "date": "2026-07-27",
+      "day_of_week": "Mon",
+      "actual_minutes": 0,
+      "status": "absent"
+    },
+    {
+      "date": "2026-07-28",
+      "day_of_week": "Tue",
+      "actual_minutes": 0,
+      "status": "absent"
+    },
+    {
+      "date": "2026-07-29",
+      "day_of_week": "Wed",
+      "actual_minutes": 0,
+      "status": "absent"
+    },
+    {
+      "date": "2026-07-30",
+      "day_of_week": "Thu",
+      "actual_minutes": 0,
+      "status": "absent"
+    },
+    {
+      "date": "2026-07-31",
+      "day_of_week": "Fri",
+      "actual_minutes": null,
+      "status": "today"
+    }
+  ],
+  "today": {
+    "date": "2026-07-31",
+    "topic": "Day 1：英语单词 + 数学极限预习 + 408 DS第6-8讲",
+    "estimated_minutes": 345,
+    "status": "ready"
+  },
+  "stats": {
+    "total_minutes": 0,
+    "streak_days": 0,
+    "completion_rate": 0
+  },
+  "mastery_summary": {
+    "mastered": 0,
+    "learning": 0,
+    "review_needed": 0
+  },
+  "recent_summaries": [
+    {
+      "date": "2026-07-31",
+      "preview": "（尚未开始学习）"
+    }
+  ],
+  "wrong_questions_count": 0,
+  "roadmap_changes": [],
+  "next_preview": "明天8/1：继续单词+极限计算预习+DS第9-11讲"
+}
