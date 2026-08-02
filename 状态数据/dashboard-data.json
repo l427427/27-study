@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-08-02T09:00:03Z",
+  "generated_at": "2026-08-02T11:00:00Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -100,7 +100,7 @@
     "last_session_date": null,
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-08-02T09:00:03Z"
+    "last_update": "2026-08-02T11:00:00Z"
   },
   "status": "ready"
 }
