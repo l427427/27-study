@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-08-02T15:00:24Z",
+  "generated_at": "2026-08-02T21:00:27Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -19,7 +19,7 @@
     "total_tasks": 112,
     "pending_tasks": 112,
     "completed_tasks": 0,
-    "overdue_tasks": 12
+    "overdue_tasks": 18
   },
   "subjects": {
     "英语": {
@@ -100,7 +100,7 @@
     "last_session_date": null,
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-08-02T15:00:24Z"
+    "last_update": "2026-08-02T21:00:27Z"
   },
   "status": "ready"
 }
