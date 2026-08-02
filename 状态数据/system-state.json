@@ -1,6 +1,6 @@
 {
   "system_version": "1.0.0",
-  "current_status": "ready",
+  "current_status": "in_session",
   "current_project": {
     "id": "kaoyan-2027",
     "title": "27考研",
@@ -11,10 +11,10 @@
   },
   "today_session": {
     "date": "2026-07-31",
-    "status": "ready",
+    "status": "in_session",
     "actual_minutes_available": 480,
-    "started_at": null,
-    "current_stage": null,
+    "started_at": "2026-07-31T09:00:00",
+    "current_stage": "opening",
     "completed_topics": []
   },
   "last_session": {
@@ -23,5 +23,5 @@
     "ended_at_stage": null,
     "last_topic": null
   },
-  "updated_at": "2026-07-31T15:51:13.173665"
+  "updated_at": "2026-07-31T16:20:00"
 }

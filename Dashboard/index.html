@@ -342,6 +342,26 @@ footer { display:flex; justify-content:space-between; gap:20px; color:var(--mute
 /* Loading */
 .loading { text-align:center; padding:80px; color:var(--muted); font-size:18px; }
 
+/* Heatmap */
+.heatmap-card { padding:26px 28px; margin-bottom:22px; }
+.heatmap-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; gap:12px; }
+.heatmap-head h3 { font-size:20px; margin-top:4px; }
+.heatmap-wrap { overflow-x:auto; padding-bottom:4px; }
+.heatmap { display:grid; grid-template-rows:repeat(7,14px); grid-auto-flow:column; grid-auto-columns:14px; gap:4px; width:max-content; }
+.heat-cell { width:14px; height:14px; border-radius:4px; background:rgba(23,25,23,0.08); }
+.heat-cell.h1 { background:var(--yellow); }
+.heat-cell.h2 { background:#c9ec8e; }
+.heat-cell.h3 { background:#8cc94e; }
+.heat-cell.h4 { background:var(--green-deep); }
+.heat-cell.today { outline:2px solid var(--violet); outline-offset:1px; }
+.heat-legend { display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+.heat-legend i { display:inline-block; width:12px; height:12px; border-radius:3px; background:rgba(23,25,23,0.08); }
+.heat-legend i.h1 { background:var(--yellow); }
+.heat-legend i.h2 { background:#c9ec8e; }
+.heat-legend i.h3 { background:#8cc94e; }
+.heat-legend i.h4 { background:var(--green-deep); }
+.heat-tip { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; flex-wrap:wrap; }
+
 /* Responsive */
 @media (max-width:980px) {
   .topbar { grid-template-columns:1fr auto; }
@@ -636,8 +656,71 @@ function renderMistakes() {
   </section>`;
 }
 
+function heatLevel(day) {
+  if (!day || !day.total) return 0;
+  if (day.done === 0) return 1;
+  const m = day.min || 0;
+  if (m < 30) return 2;
+  if (m < 90) return 3;
+  return 4;
+}
+
+function renderHeatmap() {
+  const tasks = (rd && rd.tasks) || [];
+  const cyc = (dd && dd.current_cycle) || {};
+  if (!tasks.length && !cyc.start_date) return '';
+  // 按日期聚合每日任务数据
+  const daily = {};
+  let minD = null, maxD = null;
+  tasks.forEach(t => {
+    const d = t.date;
+    if (!d) return;
+    if (!minD || d < minD) minD = d;
+    if (!maxD || d > maxD) maxD = d;
+    daily[d] = daily[d] || { total:0, done:0, min:0 };
+    daily[d].total++;
+    if (t.status === 'completed') daily[d].done++;
+    daily[d].min += (t.actual_minutes || t.estimated_minutes || 0);
+  });
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  const startD = cyc.start_date || minD;
+  const endD = cyc.cycle_end_date || (maxD && maxD > todayStr ? maxD : todayStr);
+  // 从 startD 所在周的周一开始
+  const start = new Date(startD + 'T00:00:00');
+  const end = new Date(endD + 'T00:00:00');
+  const dow = (start.getDay() + 6) % 7; // 周一=0
+  const gridStart = new Date(start);
+  gridStart.setDate(start.getDate() - dow);
+  // 逐天生成格子（顺序=周一..周日逐列）
+  const cells = [];
+  const cur = new Date(gridStart);
+  while (cur <= end) {
+    const ds = cur.toISOString().slice(0,10);
+    const day = daily[ds];
+    const lv = heatLevel(day);
+    const tip = ds + (day ? ` · ${day.done}/${day.total} 完成 · ${day.min}分钟` : (ds < todayStr ? ' · 未学习' : ' · 未开始'));
+    cells.push(`<div class="heat-cell h${lv}${ds===todayStr?' today':''}" title="${tip}"></div>`);
+    cur.setDate(cur.getDate() + 1);
+  }
+  return `<section class="heatmap-card card">
+    <div class="heatmap-head">
+      <div><span class="eyebrow">HEATMAP</span><h3>学习热力图</h3></div>
+      <span class="day-pill">${startD} → ${endD}</span>
+    </div>
+    <div class="heatmap-wrap"><div class="heatmap">${cells.join('')}</div></div>
+    <div class="heat-tip">
+      <div class="heat-legend">
+        <i></i>无安排 <i class="h1"></i>未完成 <i class="h2"></i>完成 <i class="h3"></i>较多 <i class="h4"></i>大量
+      </div>
+      <span style="font-size:12px;color:var(--muted);">紫框 = 今天 · 悬停格子看详情</span>
+    </div>
+  </section>`;
+}
+
 function renderWeekly() {
   return `<section class="weekly-view">
+    ${renderHeatmap()}
     <div class="weekly-hero card">
       <div><span class="eyebrow">WEEKLY REVIEW</span><h2>先复盘知识，再复盘表现</h2><p>不是“看过哪些”，而是哪些能讲清、哪些会用、哪些必须回头。</p></div>
       <div class="weekly-score"><strong>—</strong><span>知识掌握</span></div>

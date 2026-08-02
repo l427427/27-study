@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-08-01T14:00:54.101060Z",
+  "summary": {
+    "total_accumulated_minutes": 0,
+    "consecutive_study_days": 0,
+    "task_completion_rate": 0.0,
+    "total_tasks": 112,
+    "completed_tasks": 0,
+    "total_error_questions": 0
+  },
+  "current_cycle": {
+    "project_id": "kaoyan-2027",
+    "project_title": "27考研",
+    "cycle_start_date": "2026-07-31",
+    "cycle_total_days": 148,
+    "current_day": 0,
+    "current_phase": "phase-1",
+    "current_phase_title": "集训前抢跑",
+    "current_phase_days": "?/9"
+  },
+  "status": {
+    "system_status": "in_session",
+    "today_session_date": "2026-07-31",
+    "today_session_status": "in_session",
+    "current_stage": "opening"
+  },
+  "data_quality": {
+    "system_state": "valid",
+    "roadmap": "valid",
+    "mastery": "valid_empty",
+    "daily_records": "empty",
+    "error_log": "empty"
+  }
+}
