@@ -1,0 +1,28 @@
+{
+  "date": "2026-08-04",
+  "day_type": "A日",
+  "slots": [
+    {
+      "slot": "am",
+      "start": "08:30",
+      "end": "11:30",
+      "subject": "数学",
+      "task": "数学整套模考",
+      "planned_minutes": 180,
+      "status": "pending",
+      "actual_minutes": 0,
+      "completion_pct": 0
+    },
+    {
+      "slot": "pm",
+      "start": "14:00",
+      "end": "17:00",
+      "subject": "英语",
+      "task": "英语整套模考",
+      "planned_minutes": 180,
+      "status": "pending",
+      "actual_minutes": 0,
+      "completion_pct": 0
+    }
+  ]
+}
