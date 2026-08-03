@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-08-03T13:00:49Z",
+  "generated_at": "2026-08-03T15:10:33Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -100,7 +100,97 @@
     "last_session_date": null,
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-08-03T13:00:49Z"
+    "last_update": "2026-08-03T15:10:33Z"
+  },
+  "today": {
+    "date": "2026-08-03",
+    "status": "ready",
+    "topic": "数学 / 英语",
+    "estimated_minutes": 360,
+    "meta": "08:30-11:30 / 14:00-17:00"
+  },
+  "overview": {
+    "current_day": 4,
+    "cycle_title": "27考研",
+    "goal_summary": "上岸"
+  },
+  "stats": {
+    "total_minutes": 0,
+    "streak_days": 0
+  },
+  "weekly_checkin": [
+    {
+      "date": "2026-07-28",
+      "status": "missed"
+    },
+    {
+      "date": "2026-07-29",
+      "status": "missed"
+    },
+    {
+      "date": "2026-07-30",
+      "status": "missed"
+    },
+    {
+      "date": "2026-07-31",
+      "status": "missed"
+    },
+    {
+      "date": "2026-08-01",
+      "status": "missed"
+    },
+    {
+      "date": "2026-08-02",
+      "status": "missed"
+    },
+    {
+      "date": "2026-08-03",
+      "status": "today"
+    }
+  ],
+  "mastery_summary": {
+    "review_needed": 0
+  },
+  "wrong_questions_count": 0,
+  "exam": {
+    "today": {
+      "date": "2026-08-03",
+      "day_type": "A日",
+      "slots": [
+        {
+          "slot": "am",
+          "start": "08:30",
+          "end": "11:30",
+          "subject": "数学",
+          "task": "数学整套模考",
+          "planned_minutes": 180,
+          "status": "pending",
+          "actual_minutes": 0,
+          "completion_pct": 0,
+          "started_at": "",
+          "ended_at": "",
+          "reason": ""
+        },
+        {
+          "slot": "pm",
+          "start": "14:00",
+          "end": "17:00",
+          "subject": "英语",
+          "task": "英语整套模考",
+          "planned_minutes": 180,
+          "status": "pending",
+          "actual_minutes": 0,
+          "completion_pct": 0,
+          "started_at": "",
+          "ended_at": "",
+          "reason": ""
+        }
+      ],
+      "active_slot": null,
+      "updated_at": "2026-08-04T11:30:00+08:00"
+    },
+    "daily": [],
+    "recent": []
   },
   "status": "ready"
 }

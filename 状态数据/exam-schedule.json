@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-04",
+  "date": "2026-08-03",
   "day_type": "A日",
   "slots": [
     {
@@ -11,7 +11,10 @@
       "planned_minutes": 180,
       "status": "pending",
       "actual_minutes": 0,
-      "completion_pct": 0
+      "completion_pct": 0,
+      "started_at": "",
+      "ended_at": "",
+      "reason": ""
     },
     {
       "slot": "pm",
@@ -22,7 +25,12 @@
       "planned_minutes": 180,
       "status": "pending",
       "actual_minutes": 0,
-      "completion_pct": 0
+      "completion_pct": 0,
+      "started_at": "",
+      "ended_at": "",
+      "reason": ""
     }
-  ]
+  ],
+  "active_slot": null,
+  "updated_at": "2026-08-04T11:30:00+08:00"
 }

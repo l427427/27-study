@@ -115,31 +115,6 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset:3px; }
 .streak-copy strong { font-size:21px; letter-spacing:-0.03em; }
 .streak-copy span { color:var(--muted); font-size:11px; line-height:1.5; margin-top:5px; }
 
-/* Exam daily completion */
-.exam-card { padding:26px 28px; margin-top:20px; }
-.exam-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; }
-.exam-head h3 { margin:6px 0 0; font-size:22px; letter-spacing:-0.03em; }
-.exam-slot { display:grid; grid-template-columns:120px 1fr auto; gap:14px; align-items:center; padding:15px 0; border-top:1px solid var(--line); }
-.exam-slot:first-of-type { border-top:0; }
-.exam-time { font-size:11px; color:var(--muted); font-weight:700; }
-.exam-subj b { font-size:15px; display:block; }
-.exam-subj span { font-size:10px; color:var(--muted); }
-.exam-pct { min-width:86px; text-align:right; }
-.exam-pct b { font-size:17px; }
-.exam-pct small { display:block; font-size:9px; color:var(--muted); }
-.exam-progress { height:6px; background:#e5e3da; border-radius:999px; margin-top:7px; overflow:hidden; }
-.exam-progress span { display:block; height:100%; border-radius:inherit; background:var(--green-deep); }
-.exam-daily-table { width:100%; border-collapse:collapse; margin-top:6px; font-size:12px; }
-.exam-daily-table th, .exam-daily-table td { text-align:left; padding:8px 10px; border-top:1px solid var(--line); }
-.exam-daily-table th { color:var(--muted); font-size:10px; font-weight:700; letter-spacing:0.04em; }
-.exam-daily-table td b { font-size:13px; }
-.exam-status-chip { padding:3px 8px; border-radius:999px; font-size:9px; font-weight:800; }
-.exam-status-chip.paused { background:#f2dfda; color:#9d3827; }
-.exam-status-chip.completed { background:rgba(93,157,38,0.15); color:var(--green-deep); }
-.exam-status-chip.pending { background:#eeece5; color:var(--muted); }
-.exam-status-chip.in_progress { background:var(--yellow); color:var(--ink); }
-.exam-empty { color:var(--muted); font-size:12px; padding:14px 0; }
-
 /* Section heading */
 .section-heading { display:flex; justify-content:space-between; align-items:end; gap:20px; margin:58px 0 18px; }
 .section-heading h2 { margin:7px 0 0; font-size:clamp(28px, 3vw, 44px); letter-spacing:-0.045em; }
@@ -508,9 +483,9 @@ function renderOverview() {
         <span class="eyebrow">TODAY · ${(today.date||'').replace(/^\d{4}-/,'').replace('-','/')}</span>
         <span class="today-status">${today.status==='ready'?'未开始':today.status==='in_session'?'进行中':today.status==='completed'?'已完成':'待定'}</span>
       </div>
-      <p class="today-kicker">${dd.exam?.today?.day_type ? '考试时段 · '+dd.exam.today.day_type : '考试时段复习'}</p>
+      <p class="today-kicker">今天只攻一个点</p>
       <h2>${esc(today.topic||'（暂无安排）')}</h2>
-      <p class="today-meta">${today.meta ? esc(today.meta) : ''}${today.estimated_minutes ? ' · 预计 '+today.estimated_minutes+' 分钟' : ''}</p>
+      <p class="today-meta">预计 ${today.estimated_minutes||'?'} 分钟 · 1 个概念 + 1 个练习</p>
       ${today.status==='ready' ? `
       <div class="time-choice">
         ${[30,45,60].map(m=>`<button class="${(today.estimated_minutes||45)===m?'selected':''}" onclick="updateToday(${m})">${m} min</button>`).join('')}
@@ -536,8 +511,6 @@ function renderOverview() {
       <span>比“每天都学”更重要的是，断了一天还能回来。</span>
     </div>
   </section>
-
-  ${renderExamCard()}
 
   <div class="section-heading">
     <div><span class="eyebrow">ROADMAP</span><h2>你的路线，正在跟着你变化</h2></div>
@@ -585,44 +558,6 @@ function renderOverview() {
       <div class="quote-footer"><span>来自首次采访</span><span>影响整个学习计划</span></div>
     </article>
   </div>`;
-}
-
-function renderExamCard() {
-  const ex = dd.exam || {};
-  const today = ex.today || null;
-  const daily = ex.daily || [];
-  const statusMap = {pending:'未开始', in_progress:'进行中', paused:'已暂停', completed:'已完成'};
-  const todaySlots = (today && today.slots) ? today.slots : [];
-  return `<section class="exam-card card">
-    <div class="exam-head">
-      <div><span class="eyebrow">EXAM SLOTS</span><h3>考试时段 · 每日完成情况</h3></div>
-      ${today ? `<span class="day-pill">${esc(today.day_type||'')} · ${esc(today.date||'')}</span>` : ''}
-    </div>
-    ${todaySlots.length ? todaySlots.map(s=>`
-      <div class="exam-slot">
-        <span class="exam-time">${esc(s.start||'')}–${esc(s.end||'')}</span>
-        <div class="exam-subj"><b>${esc(s.subject||'')}整套模考</b><span>${esc(s.task||'')}</span></div>
-        <div class="exam-pct">
-          <b>${s.completion_pct||0}%</b>
-          <small>${s.actual_minutes||0}/${s.planned_minutes||180} 分钟</small>
-          <div class="exam-progress"><span style="width:${Math.min(100,s.completion_pct||0)}%"></span></div>
-        </div>
-      </div>`).join('') : '<p class="exam-empty">今天暂无考试时段安排。</p>'}
-    ${daily.length ? `
-    <table class="exam-daily-table">
-      <thead><tr><th>日期</th><th>时段</th><th>科目</th><th>完成</th><th>状态</th></tr></thead>
-      <tbody>
-        ${daily.slice(0,7).map(d=>d.slots.map(s=>`
-          <tr>
-            <td><b>${esc(d.date||'')}</b> ${esc(d.day_type||'')}</td>
-            <td>${esc(s.slot==='am'?'上午':'下午')}</td>
-            <td>${esc(s.subject||'')}</td>
-            <td>${s.actual_minutes||0}/${s.planned_minutes||180} 分钟 · ${s.completion_pct||0}%</td>
-            <td><span class="exam-status-chip ${esc(s.status||'pending')}">${statusMap[s.status]||'未开始'}</span></td>
-          </tr>`).join('')).join('')}
-      </tbody>
-    </table>` : '<p class="exam-empty">还没有考试记录。每日 8:30 / 14:00 开始提醒，11:30 / 17:00 自动结算并记录完成度。</p>'}
-  </section>`;
 }
 
 function renderRoadmapPreview() {
