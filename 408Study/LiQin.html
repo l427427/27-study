@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study · with Hermes</title>
+<style>
+:root {
+  --paper: #f3f1e9;
+  --surface: #fbfaf5;
+  --ink: #171917;
+  --muted: #676b64;
+  --line: #d8d6cd;
+  --green: #b9ff66;
+  --green-deep: #5d9d26;
+  --violet: #7767ff;
+  --violet-soft: #ece9ff;
+  --coral: #ff876f;
+  --yellow: #ffdb5d;
+  --radius: 22px;
+  --shadow: 0 16px 50px rgba(28,30,27,0.07);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: radial-gradient(circle at 12% 2%, rgba(185,255,102,0.18), transparent 24rem), var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  line-height: 1.5;
+}
+button { font:inherit; color:inherit; cursor:pointer; }
+button:focus-visible { outline: 3px solid var(--violet); outline-offset:3px; }
+
+/* Topbar */
+.topbar {
+  position:sticky; top:0; z-index:20; min-height:76px;
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:28px;
+  padding:14px max(24px, calc((100vw - 1380px)/2));
+  border-bottom:1px solid rgba(23,25,23,0.12);
+  background:rgba(243,241,233,0.88); backdrop-filter:blur(18px);
+}
+.brand { background:transparent; border:0; padding:0; display:flex; align-items:center; gap:11px; text-align:left; }
+.brand-mark { width:42px; height:42px; display:grid; place-items:center; border-radius:50%; background:var(--ink); color:var(--green); font-weight:900; font-size:20px; }
+.brand b, .brand small { display:block; }
+.brand b { font-size:14px; letter-spacing:0.09em; }
+.brand small { color:var(--muted); margin-top:2px; }
+.nav-tabs { display:flex; padding:4px; border:1px solid var(--line); background:rgba(255,255,255,0.46); border-radius:999px; }
+.nav-tabs button { border:0; background:transparent; padding:9px 18px; border-radius:999px; color:var(--muted); font-size:13px; }
+.nav-tabs button.active { background:var(--ink); color:white; }
+.profile-chip { justify-self:end; display:flex; align-items:center; gap:9px; font-size:12px; color:var(--muted); }
+.profile-chip b { display:grid; place-items:center; min-width:38px; height:38px; padding:0 12px; border-radius:999px; background:white; border:1px solid var(--line); color:var(--ink); }
+.local-dot { width:8px; height:8px; border-radius:50%; background:#56c837; box-shadow:0 0 0 4px rgba(86,200,55,0.15); }
+
+/* Shell */
+.page-shell { width:min(1380px, calc(100% - 48px)); margin:0 auto; padding:40px 0 60px; }
+.card { background:var(--surface); border:1px solid rgba(23,25,23,0.13); border-radius:var(--radius); box-shadow:var(--shadow); }
+.eyebrow { font-size:11px; font-weight:800; letter-spacing:0.13em; color:var(--muted); }
+.eyebrow.violet { color:var(--violet); }
+.eyebrow.coral { color:#d84d38; }
+
+/* Hero grid */
+.hero-grid { display:grid; grid-template-columns:minmax(0, 1.65fr) minmax(360px, 0.85fr); gap:20px; }
+
+/* Goal card */
+.goal-card { padding:28px 30px 24px; overflow:hidden; position:relative; }
+.goal-card::after { content:""; position:absolute; width:260px; height:260px; border:1px solid var(--line); border-radius:50%; right:-120px; top:-130px; }
+.goal-content { display:grid; grid-template-columns:1fr auto; align-items:center; gap:28px; padding:32px 0 28px; }
+.goal-content h1 { margin:0; font-size:clamp(42px, 5vw, 72px); line-height:0.98; letter-spacing:-0.055em; font-weight:820; }
+.goal-description { max-width:610px; margin:22px 0 0; color:var(--muted); line-height:1.7; font-size:15px; }
+.muted { color:var(--muted); margin:0 0 8px; font-size:13px; }
+.eyebrow-row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.day-pill { padding:7px 11px; border-radius:999px; border:1px solid var(--line); background:white; font-size:11px; font-weight:700; }
+.goal-footer { border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:12px; display:flex; gap:30px; }
+.goal-footer b { color:var(--ink); font-size:17px; margin-right:3px; }
+
+/* Progress ring */
+.progress-ring { --p:0deg; width:150px; aspect-ratio:1; display:grid; place-items:center; border-radius:50%; background:conic-gradient(var(--ink) var(--p), var(--green) var(--p)); position:relative; }
+.progress-ring::after { content:""; position:absolute; inset:12px; border-radius:50%; background:var(--surface); }
+.progress-ring>div { position:relative; z-index:1; text-align:center; }
+.progress-ring strong { display:block; font-size:31px; letter-spacing:-0.05em; }
+.progress-ring span { display:block; color:var(--muted); font-size:11px; margin-top:3px; }
+
+/* Today card */
+.today-card { padding:28px; background:var(--green); box-shadow:none; display:flex; flex-direction:column; min-height:410px; }
+.today-card.active { background:var(--yellow); }
+.today-card.done { background:var(--violet-soft); }
+.today-top { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.today-status { padding:7px 11px; border-radius:999px; border:1px solid rgba(23,25,23,0.24); background:rgba(255,255,255,0.48); font-size:11px; font-weight:700; }
+.today-kicker { margin:38px 0 7px; font-size:13px; }
+.today-card h2 { margin:0; font-size:clamp(32px, 3.2vw, 48px); line-height:1.02; letter-spacing:-0.045em; }
+.today-meta { font-size:13px; color:rgba(23,25,23,0.68); margin:15px 0 22px; }
+.time-choice { display:flex; gap:6px; margin-top:auto; margin-bottom:10px; }
+.time-choice button { border:1px solid rgba(23,25,23,0.24); background:transparent; padding:7px 11px; border-radius:999px; font-size:11px; }
+.time-choice button.selected { background:var(--ink); color:white; }
+.primary-action { border:0; border-radius:13px; min-height:48px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 17px; background:var(--ink); color:white; font-weight:750; }
+.primary-action span { font-size:20px; }
+.secondary-action { border:0; border-radius:13px; min-height:48px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 17px; background:white; color:var(--ink); font-weight:750; width:100%; }
+.secondary-action span { font-size:20px; }
+
+/* Week strip */
+.week-strip { margin-top:20px; min-height:118px; padding:18px 22px; display:grid; grid-template-columns:150px 1fr minmax(220px,0.5fr); align-items:center; gap:24px; box-shadow:none; }
+.week-title b, .week-title span { display:block; }
+.week-title b { margin-top:8px; font-size:15px; }
+.days-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:7px; }
+.day-cell { min-width:62px; min-height:77px; border:1px solid var(--line); border-radius:14px; padding:9px; display:grid; grid-template-columns:1fr auto; align-items:start; background:white; }
+.day-cell>span { font-size:10px; color:var(--muted); }
+.day-cell>b { font-size:12px; }
+.day-mark { grid-column:1/-1; align-self:end; font-size:10px; font-weight:800; color:var(--green-deep); }
+.day-cell.done { background:rgba(185,255,102,0.16); border-color:rgba(93,157,38,0.25); }
+.day-cell.missed { opacity:0.55; }
+.day-cell.today { border:2px solid var(--ink); }
+.day-cell.today .day-mark { color:var(--violet); }
+.streak-copy { border-left:1px solid var(--line); padding-left:22px; }
+.streak-copy strong, .streak-copy span { display:block; }
+.streak-copy strong { font-size:21px; letter-spacing:-0.03em; }
+.streak-copy span { color:var(--muted); font-size:11px; line-height:1.5; margin-top:5px; }
+
+/* Exam daily completion */
+.exam-card { padding:26px 28px; margin-top:20px; }
+.exam-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; }
+.exam-head h3 { margin:6px 0 0; font-size:22px; letter-spacing:-0.03em; }
+.exam-slot { display:grid; grid-template-columns:120px 1fr auto; gap:14px; align-items:center; padding:15px 0; border-top:1px solid var(--line); }
+.exam-slot:first-of-type { border-top:0; }
+.exam-time { font-size:11px; color:var(--muted); font-weight:700; }
+.exam-subj b { font-size:15px; display:block; }
+.exam-subj span { font-size:10px; color:var(--muted); }
+.exam-pct { min-width:86px; text-align:right; }
+.exam-pct b { font-size:17px; }
+.exam-pct small { display:block; font-size:9px; color:var(--muted); }
+.exam-progress { height:6px; background:#e5e3da; border-radius:999px; margin-top:7px; overflow:hidden; }
+.exam-progress span { display:block; height:100%; border-radius:inherit; background:var(--green-deep); }
+.exam-daily-table { width:100%; border-collapse:collapse; margin-top:6px; font-size:12px; }
+.exam-daily-table th, .exam-daily-table td { text-align:left; padding:8px 10px; border-top:1px solid var(--line); }
+.exam-daily-table th { color:var(--muted); font-size:10px; font-weight:700; letter-spacing:0.04em; }
+.exam-daily-table td b { font-size:13px; }
+.exam-status-chip { padding:3px 8px; border-radius:999px; font-size:9px; font-weight:800; }
+.exam-status-chip.paused { background:#f2dfda; color:#9d3827; }
+.exam-status-chip.completed { background:rgba(93,157,38,0.15); color:var(--green-deep); }
+.exam-status-chip.pending { background:#eeece5; color:var(--muted); }
+.exam-status-chip.in_progress { background:var(--yellow); color:var(--ink); }
+.exam-empty { color:var(--muted); font-size:12px; padding:14px 0; }
+
+/* Section heading */
+.section-heading { display:flex; justify-content:space-between; align-items:end; gap:20px; margin:58px 0 18px; }
+.section-heading h2 { margin:7px 0 0; font-size:clamp(28px, 3vw, 44px); letter-spacing:-0.045em; }
+.section-heading p { margin:8px 0 0; color:var(--muted); }
+.text-button { border:0; background:transparent; cursor:pointer; font-size:13px; color:var(--muted); padding:9px; }
+
+/* Roadmap preview */
+.roadmap-preview { padding:34px; }
+.preview-week-head { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; }
+.preview-week-head div { display:flex; align-items:baseline; gap:12px; }
+.preview-week-head b { font-size:19px; }
+.preview-week-head div span { color:var(--muted); font-size:11px; }
+.week-progress { padding:7px 11px; border-radius:999px; background:var(--green); font-size:10px; font-weight:800; }
+.preview-days-path { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; position:relative; }
+.preview-days-path::before { content:""; position:absolute; left:7%; right:7%; top:17px; height:2px; background:var(--line); }
+.preview-day { position:relative; z-index:1; min-width:0; border:1px solid var(--line); border-radius:15px; background:var(--surface); padding:0 11px 13px; text-align:left; cursor:pointer; }
+.preview-day .path-dot { width:34px; height:34px; margin:0 0 13px; transform:translateY(-1px); display:grid; place-items:center; border-radius:50%; border:4px solid var(--surface); box-shadow:0 0 0 1px var(--line); background:#e4e2da; font-size:10px; font-weight:900; }
+.preview-day.done .path-dot { background:var(--ink); color:white; }
+.preview-day.review .path-dot { background:var(--coral); color:var(--ink); }
+.preview-day.today { border:2px solid var(--ink); background:rgba(185,255,102,0.17); }
+.preview-day.today .path-dot { background:var(--green); box-shadow:0 0 0 2px var(--ink); }
+.preview-day.rest { opacity:0.5; }
+.preview-day small, .preview-day b, .preview-day em { display:block; }
+.preview-day small { font-size:8px; color:var(--muted); }
+.preview-day b { margin:6px 0 12px; font-size:12px; min-height:32px; line-height:1.35; }
+.preview-day em { color:var(--muted); font-size:9px; font-style:normal; }
+
+/* Change note */
+.change-note { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border-radius:14px; background:var(--violet-soft); margin-top:22px; }
+.change-note p { margin:4px 0 0; color:#5d568a; font-size:12px; line-height:1.5; }
+.change-icon { display:grid; place-items:center; min-width:28px; height:28px; background:var(--violet); color:white; border-radius:50%; }
+
+/* Dashboard grid */
+.dashboard-grid { display:grid; grid-template-columns:1.18fr 0.82fr; gap:20px; margin-top:20px; }
+.insight-card { padding:28px; background:#22231f; color:white; }
+.card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.card-header h3 { margin:8px 0 0; font-size:26px; letter-spacing:-0.035em; }
+.week-badge, .count-badge { display:grid; place-items:center; border-radius:50%; width:48px; height:48px; border:1px solid rgba(255,255,255,0.25); font-size:11px; }
+.count-badge { background:var(--coral); color:var(--ink); border:0; width:38px; height:38px; font-weight:800; }
+.insight-list { margin:28px 0; }
+.insight-row { display:grid; grid-template-columns:42px 1fr; gap:12px; padding:16px 0; border-top:1px solid rgba(255,255,255,0.14); }
+.insight-number { color:var(--violet); font-weight:800; }
+.insight-row small, .insight-row b { display:block; }
+.insight-row small { color:#a4a69e; margin-bottom:5px; }
+.insight-row b { font-size:17px; }
+.insight-row p { color:#aeb0aa; margin:5px 0 0; font-size:11px; line-height:1.5; }
+
+/* Mastery card */
+.mastery-card { padding:28px; }
+.large-stat { font-size:48px; line-height:1; letter-spacing:-0.06em; }
+.mastery-list { margin-top:29px; display:grid; gap:20px; }
+.mastery-item>div:first-child { display:flex; justify-content:space-between; font-size:12px; }
+.bar { height:8px; background:#e5e3da; border-radius:999px; margin-top:8px; overflow:hidden; }
+.bar span { display:block; height:100%; border-radius:inherit; background:var(--ink); }
+.bar span.learning { background:var(--violet); }
+.bar span.review { background:var(--coral); }
+.microcopy { font-size:11px; color:var(--muted); line-height:1.5; border-top:1px solid var(--line); padding-top:17px; margin:24px 0 0; }
+
+/* Mistakes card */
+.mistakes-card { padding:28px; box-shadow:none; }
+.mistake-list { margin-top:22px; }
+.mistake-row { width:100%; border:0; border-top:1px solid var(--line); background:transparent; padding:17px 0; display:grid; grid-template-columns:12px 1fr auto; gap:12px; align-items:start; text-align:left; cursor:pointer; }
+.mistake-dot { width:9px; height:9px; background:var(--coral); border-radius:50%; margin-top:5px; }
+.mistake-row b { font-size:14px; }
+.mistake-row p { color:var(--muted); margin:6px 0 0; font-size:11px; line-height:1.5; }
+.review-time { padding:5px 8px; background:#f2dfda; border-radius:999px; font-size:9px; color:#9d3827; white-space:nowrap; }
+.mistake-link { width:100%; text-align:left; border-top:1px solid var(--line); margin-top:6px; padding-top:15px; }
+
+/* Quote card */
+.quote-card { padding:28px; background:var(--green); box-shadow:none; display:flex; flex-direction:column; }
+.quote-card blockquote { margin:34px 0 20px; font-size:clamp(26px,3vw,42px); line-height:1.1; letter-spacing:-0.05em; font-weight:750; }
+.quote-card>p { color:rgba(23,25,23,0.7); line-height:1.7; font-size:13px; max-width:520px; }
+.quote-footer { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:auto; padding-top:25px; border-top:1px solid rgba(23,25,23,0.2); font-size:10px; }
+
+/* Roadmap detail view */
+.detail-view { min-height:800px; }
+.updated-chip { padding:7px 11px; border-radius:999px; border:1px solid var(--line); background:var(--green); font-size:11px; font-weight:700; }
+.roadmap-stage-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:22px; }
+.stage-summary { position:relative; border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,0.42); min-height:128px; padding:16px; display:flex; flex-direction:column; align-items:flex-start; text-align:left; cursor:pointer; }
+.stage-summary>span { color:var(--muted); font-size:9px; }
+.stage-summary b { margin-top:13px; font-size:16px; }
+.stage-summary small { margin-top:4px; color:var(--muted); font-size:10px; }
+.stage-summary em { position:absolute; right:14px; bottom:13px; font-style:normal; font-size:18px; font-weight:800; }
+.stage-summary.completed { background:#252720; color:white; }
+.stage-summary.completed small, .stage-summary.completed>span { color:#aeb0a8; }
+.stage-summary.active { background:var(--green); }
+.stage-summary.selected { border:2px solid var(--ink); transform:translateY(-2px); }
+
+.roadmap-timeline { display:grid; gap:16px; }
+.roadmap-week { padding:24px; box-shadow:none; }
+.roadmap-week.current { border:2px solid var(--ink); }
+.roadmap-week-head { display:grid; grid-template-columns:120px 1fr auto; gap:20px; align-items:center; margin-bottom:20px; }
+.week-index { display:flex; flex-direction:column; }
+.week-index b { font-size:25px; letter-spacing:-0.04em; }
+.week-index span, .roadmap-week-head small { color:var(--muted); font-size:9px; }
+.roadmap-week-head h3 { margin:4px 0 0; font-size:20px; }
+.current-week-chip { padding:7px 11px; background:var(--green); border-radius:999px; font-size:9px; font-weight:800; }
+.roadmap-days-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+.roadmap-days-grid.final { grid-template-columns:repeat(2,minmax(180px,1fr)); max-width:520px; }
+.roadmap-day-card { min-height:135px; border:1px solid var(--line); border-radius:13px; background:white; padding:12px; display:flex; flex-direction:column; align-items:flex-start; text-align:left; cursor:pointer; position:relative; }
+.roadmap-day-card>div { width:100%; display:flex; align-items:center; justify-content:space-between; gap:5px; }
+.roadmap-day-card span, .roadmap-day-card em { font-size:8px; font-style:normal; color:var(--muted); }
+.roadmap-day-card em { padding:3px 5px; border-radius:99px; background:#eeece5; }
+.roadmap-day-card b { margin:15px 0 8px; font-size:12px; line-height:1.35; }
+.roadmap-day-card>small { margin-top:auto; color:var(--muted); font-size:9px; }
+.roadmap-day-card i { position:absolute; right:8px; bottom:8px; padding:4px 6px; border-radius:99px; font-size:8px; font-style:normal; font-weight:800; background:var(--violet-soft); color:var(--violet); }
+.roadmap-day-card.done { background:rgba(185,255,102,0.13); }
+.roadmap-day-card.done::after { content:"✓"; position:absolute; right:10px; bottom:8px; font-weight:900; color:var(--green-deep); }
+.roadmap-day-card.today { background:var(--green); border:2px solid var(--ink); }
+.roadmap-day-card.review { background:#fff0eb; border-color:var(--coral); }
+.roadmap-day-card.moved { border:2px dashed var(--violet); background:var(--violet-soft); }
+.roadmap-day-card.rest { opacity:0.48; }
+.roadmap-day-card.milestone { background:#252720; color:white; }
+.roadmap-day-card.milestone span, .roadmap-day-card.milestone>small { color:#b9bcb5; }
+
+/* Adjustment log */
+.adjustment-log { margin-top:20px; padding:28px; }
+.adjustment-log h3 { font-size:26px; margin:8px 0 22px; }
+.log-row { display:grid; grid-template-columns:100px 240px 1fr; gap:22px; padding:17px 0; border-top:1px solid var(--line); align-items:baseline; }
+.log-row time, .log-row p { color:var(--muted); font-size:11px; }
+.log-row p { margin:0; line-height:1.5; }
+
+/* Wrong questions view */
+.mistakes-view { min-height:800px; }
+.coral-chip { background:#ffe0d8; border-color:var(--coral); }
+.mistake-book-layout { display:grid; grid-template-columns:minmax(250px,0.36fr) 1fr; gap:18px; }
+.mistake-index { padding:9px; align-self:start; box-shadow:none; }
+.mistake-index button { width:100%; border:0; border-radius:13px; background:transparent; padding:15px 12px; display:grid; grid-template-columns:32px 1fr; gap:8px; text-align:left; }
+.mistake-index button+button { border-top:1px solid var(--line); }
+.mistake-index button.selected { background:#ffe7e1; }
+.mistake-index button>span { color:#c84d39; font-weight:800; }
+.mistake-index b, .mistake-index small { display:block; }
+.mistake-index b { font-size:12px; }
+.mistake-index small { margin-top:5px; color:var(--muted); font-size:9px; }
+.mistake-detail { padding:31px; }
+.mistake-detail-head { display:flex; justify-content:space-between; align-items:flex-start; gap:15px; }
+.mistake-detail-head h3 { margin:7px 0 0; font-size:31px; letter-spacing:-0.04em; }
+.question-block { margin-top:28px; padding:23px; border-radius:16px; background:#252720; color:white; }
+.question-block small, .my-answer small, .diagnosis small, .correct-answer small { display:block; margin-bottom:10px; color:var(--muted); font-size:9px; font-weight:800; letter-spacing:0.12em; }
+.question-block small { color:#afb1ab; }
+.question-block blockquote { margin:0; font-size:22px; line-height:1.45; letter-spacing:-0.025em; }
+.answer-compare { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+.my-answer, .diagnosis { padding:19px; border-radius:14px; background:#eeeae2; }
+.diagnosis { background:#ffe7e1; }
+.my-answer p, .diagnosis p, .correct-answer p { margin:0; font-size:12px; line-height:1.65; }
+.correct-answer { margin-top:10px; padding:20px; border:1px solid rgba(93,157,38,0.35); border-radius:14px; background:rgba(185,255,102,0.14); }
+.mistake-actions { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:24px; padding-top:18px; border-top:1px solid var(--line); }
+.mistake-actions span { color:var(--muted); font-size:10px; }
+.mistake-actions button { border:0; border-radius:999px; background:var(--ink); color:white; padding:11px 15px; font-size:11px; }
+
+/* Weekly view */
+.weekly-view { min-height:800px; }
+.weekly-hero { margin-top:20px; padding:38px; display:flex; justify-content:space-between; align-items:center; background:var(--violet-soft); box-shadow:none; }
+.weekly-hero h2 { font-size:clamp(36px,5vw,66px); line-height:1; margin:14px 0; max-width:820px; letter-spacing:-0.055em; }
+.weekly-hero p { color:#625a92; }
+.weekly-score { min-width:150px; aspect-ratio:1; border-radius:50%; background:var(--violet); color:white; display:grid; place-items:center; align-content:center; }
+.weekly-score strong { font-size:48px; line-height:1; }
+.weekly-score span { font-size:11px; margin-top:5px; }
+.weekly-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px; }
+.weekly-stats article { padding:20px; box-shadow:none; }
+.weekly-stats small, .weekly-stats b, .weekly-stats span { display:block; }
+.weekly-stats small { color:var(--muted); }
+.weekly-stats b { font-size:31px; margin:13px 0 7px; letter-spacing:-0.05em; }
+.weekly-stats span { font-size:10px; color:var(--muted); }
+.weekly-grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:20px; margin-top:20px; }
+.pattern-report, .next-week-card { padding:30px; }
+.pattern-report h3, .next-week-card h3 { margin:9px 0 24px; font-size:28px; }
+.pattern-row { display:grid; grid-template-columns:45px 1fr; gap:14px; padding:18px 0; border-top:1px solid var(--line); }
+.pattern-row>span { font-weight:800; color:var(--violet); }
+.pattern-row small, .pattern-row b { display:block; }
+.pattern-row small { color:var(--muted); margin-bottom:5px; }
+.pattern-row p { margin:5px 0 0; color:var(--muted); font-size:11px; }
+.hypothesis-note { margin-top:15px; background:var(--violet-soft); border-radius:14px; padding:16px; }
+.hypothesis-note p { font-size:11px; line-height:1.5; color:#625a92; margin:5px 0 0; }
+.next-week-card { background:var(--green); box-shadow:none; }
+.next-week-card ol { list-style:none; margin:0 0 24px; padding:0; }
+.next-week-card li { display:grid; grid-template-columns:40px 1fr; gap:12px; padding:17px 0; border-top:1px solid rgba(23,25,23,0.2); }
+.next-week-card li>span { font-weight:800; }
+.next-week-card li b { display:block; }
+.next-week-card li p { margin:5px 0 0; color:rgba(23,25,23,0.67); font-size:11px; line-height:1.5; }
+.confirm-panel { margin-top:12px; padding:15px; border-radius:13px; background:rgba(255,255,255,0.58); }
+.confirm-panel p { margin:0 0 11px; font-size:11px; line-height:1.5; }
+.confirm-panel div { display:flex; gap:8px; }
+.confirm-panel button { border:1px solid var(--ink); border-radius:999px; background:transparent; padding:7px 11px; font-size:10px; }
+
+/* Empty state */
+.empty { text-align:center; padding:60px 20px; color:var(--muted); }
+.empty .icon { font-size:48px; margin-bottom:16px; }
+
+/* Knowledge review */
+.knowledge-review { margin-top:20px; padding:29px; }
+.knowledge-review .card-header h3 { margin-bottom:5px; }
+.knowledge-review .card-header p { margin:0; color:var(--muted); font-size:11px; }
+.knowledge-table { margin-top:22px; }
+.knowledge-row { display:grid; grid-template-columns:minmax(210px,1fr) 90px 54px minmax(120px,0.5fr); gap:15px; align-items:center; padding:15px 0; border-top:1px solid var(--line); }
+.knowledge-row b { font-size:13px; }
+.knowledge-row p { margin:4px 0 0; color:var(--muted); font-size:10px; }
+.knowledge-row strong { font-size:16px; text-align:right; }
+.mini-bar { height:7px; border-radius:99px; background:#e5e3da; overflow:hidden; }
+.mini-bar span { display:block; height:100%; background:var(--ink); border-radius:inherit; }
+.knowledge-legend { display:flex; gap:7px; flex-wrap:wrap; }
+.knowledge-legend span, .knowledge-status { padding:5px 8px; border-radius:999px; font-size:8px; font-weight:800; }
+.knowledge-legend .good, .knowledge-status.good { background:rgba(185,255,102,0.35); color:#3d7418; }
+.knowledge-legend .mid, .knowledge-status.mid { background:var(--violet-soft); color:var(--violet); }
+.knowledge-legend .weak, .knowledge-status.weak { background:#ffe2db; color:#bd442f; }
+
+.performance-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; }
+.performance-card { padding:28px; box-shadow:none; }
+.performance-card.good { background:rgba(185,255,102,0.2); }
+.performance-card.improve { background:#fff2ee; }
+.performance-card h3 { margin:8px 0 20px; font-size:27px; }
+.performance-card ul { list-style:none; margin:0; padding:0; }
+.performance-card li { padding:14px 0; border-top:1px solid rgba(23,25,23,0.14); }
+.performance-card li b { font-size:13px; }
+.performance-card li p { margin:5px 0 0; color:var(--muted); font-size:10px; line-height:1.55; }
+.method-adjustment { border-top:1px solid rgba(23,25,23,0.2); margin:5px 0 18px; padding-top:15px; }
+.method-adjustment b { font-size:11px; }
+.method-adjustment p { margin:5px 0 0; color:rgba(23,25,23,0.67); font-size:10px; line-height:1.5; }
+footer { display:flex; justify-content:space-between; gap:20px; color:var(--muted); font-size:10px; padding:35px 5px 0; }
+
+/* Toast */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:white; padding:10px 20px; border-radius:8px; font-size:14px; z-index:100; opacity:0; transform:translateY(10px); transition:all 0.3s; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+/* Loading */
+.loading { text-align:center; padding:80px; color:var(--muted); font-size:18px; }
+
+/* Heatmap */
+.heatmap-card { padding:26px 28px; margin-bottom:22px; }
+.heatmap-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; gap:12px; }
+.heatmap-head h3 { font-size:20px; margin-top:4px; }
+.heatmap-wrap { overflow-x:auto; padding-bottom:4px; }
+.heatmap { display:grid; grid-template-rows:repeat(7,14px); grid-auto-flow:column; grid-auto-columns:14px; gap:4px; width:max-content; }
+.heat-cell { width:14px; height:14px; border-radius:4px; background:rgba(23,25,23,0.08); }
+.heat-cell.h1 { background:var(--yellow); }
+.heat-cell.h2 { background:#c9ec8e; }
+.heat-cell.h3 { background:#8cc94e; }
+.heat-cell.h4 { background:var(--green-deep); }
+.heat-cell.today { outline:2px solid var(--violet); outline-offset:1px; }
+.heat-legend { display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+.heat-legend i { display:inline-block; width:12px; height:12px; border-radius:3px; background:rgba(23,25,23,0.08); }
+.heat-legend i.h1 { background:var(--yellow); }
+.heat-legend i.h2 { background:#c9ec8e; }
+.heat-legend i.h3 { background:#8cc94e; }
+.heat-legend i.h4 { background:var(--green-deep); }
+.heat-tip { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; flex-wrap:wrap; }
+
+/* Responsive */
+@media (max-width:980px) {
+  .topbar { grid-template-columns:1fr auto; }
+  .nav-tabs { grid-row:2; grid-column:1/-1; justify-self:stretch; justify-content:center; }
+  .hero-grid, .dashboard-grid, .weekly-grid { grid-template-columns:1fr; }
+  .today-card { min-height:360px; }
+  .week-strip { grid-template-columns:1fr; }
+  .streak-copy { border-left:0; border-top:1px solid var(--line); padding:15px 0 0; }
+  .weekly-stats { grid-template-columns:repeat(2,1fr); }
+  .preview-days-path, .roadmap-days-grid { grid-template-columns:repeat(4,minmax(125px,1fr)); overflow-x:auto; padding-bottom:8px; }
+  .roadmap-stage-summary { grid-template-columns:repeat(2,1fr); }
+  .mistake-book-layout, .performance-grid { grid-template-columns:1fr; }
+}
+@media (max-width:680px) {
+  .page-shell { width:min(100% - 24px, 1380px); padding-top:20px; }
+  .goal-content { grid-template-columns:1fr; }
+  .goal-footer { flex-wrap:wrap; gap:13px; }
+  .log-row { grid-template-columns:1fr; gap:4px; }
+  .roadmap-week-head { flex-direction:column; }
+  .roadmap-days-grid { grid-template-columns:repeat(7,132px); }
+  .answer-compare { grid-template-columns:1fr; }
+  .knowledge-row { grid-template-columns:1fr auto 48px; }
+  .knowledge-row .mini-bar { grid-column:1/-1; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="brand" onclick="switchView('overview')">
+    <span class="brand-mark">A</span>
+    <span><b>AI STUDY</b><small>with Hermes</small></span>
+  </button>
+  <nav class="nav-tabs" id="nav">
+    <button data-v="overview" class="active">总览</button>
+    <button data-v="roadmap">Roadmap</button>
+    <button data-v="mistakes">错题本</button>
+    <button data-v="weekly">本周复盘</button>
+  </nav>
+  <div class="profile-chip">
+    <span class="local-dot"></span><span>本地学习中</span><b>LiQin</b>
+  </div>
+</header>
+
+<div class="page-shell" id="app"><div class="loading">⏳ 加载中...</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const B = '../状态数据/';
+let dd=null, rd=null, md=null;
+const DAY_MAP = ['一','二','三','四','五','六','日'];
+const DOW_MAP = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+async function init() {
+  try {
+    [dd, rd, md] = await Promise.all([
+      fetch(B+'dashboard-data.json').then(r=>r.json()),
+      fetch(B+'roadmap.json').then(r=>r.json()),
+      fetch(B+'mastery.json').then(r=>r.json())
+    ]);
+  } catch(e) { document.getElementById('app').innerHTML='<div class="card" style="padding:40px;text-align:center;color:var(--coral);">⚠️ 无法加载学习数据。请在 Projects/AI-Study/ 目录下启动服务。</div>'; return; }
+  switchView('overview');
+}
+
+function esc(s) { if(!s) return ''; const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function fmtDT(s) {
+  if(!s) return '';
+  const d = new Date(s);
+  if(isNaN(d)) return s;
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+function switchView(v) {
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active', b.dataset.v===v));
+  const app = document.getElementById('app');
+  if (v==='overview') app.innerHTML = renderOverview();
+  else if (v==='roadmap') app.innerHTML = renderRoadmap();
+  else if (v==='mistakes') app.innerHTML = renderMistakes();
+  else if (v==='weekly') app.innerHTML = renderWeekly();
+}
+
+function progressRing(pct) {
+  return `<div class="progress-ring" style="--p:${pct*3.6}deg"><div><strong>${pct}%</strong><span>总进度</span></div></div>`;
+}
+
+function renderOverview() {
+  if (!dd) return '';
+  const today = dd.today || {};
+  const week = dd.weekly_checkin || [];
+  const stats = dd.stats || {};
+  const ov = dd.overview || {};
+  const masteryS = dd.mastery_summary || {};
+  const completedDays = week.filter(d=>d.status==='completed'||d.status==='done').length;
+
+  const totalTasks = rd?.tasks?.length || 0;
+  const doneTasks = (rd?.tasks||[]).filter(t=>t.status==='completed').length;
+  const pct = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
+  const totalMin = stats.total_minutes || 0;
+
+  return `
+  <section class="hero-grid">
+    <article class="goal-card card">
+      <div class="eyebrow-row">
+        <span class="eyebrow">LEARNING CYCLE</span>
+        <span class="day-pill">第 ${ov.current_day||0} 天</span>
+      </div>
+      <div class="goal-content">
+        <div>
+          <p class="muted">当前目标</p>
+          <h1>${esc(ov.cycle_title||'（待设置）')}</h1>
+          <p class="goal-description">${esc(ov.goal_summary||'')}</p>
+        </div>
+        ${progressRing(pct)}
+      </div>
+      <div class="goal-footer">
+        <span><b>${doneTasks}</b> / ${totalTasks} 个任务</span>
+        <span><b>${(totalMin/60).toFixed(1)}</b> 小时投入</span>
+        <span><b>${masteryS.review_needed||0}</b> 个待巩固点</span>
+      </div>
+    </article>
+
+    <article class="today-card card ${today.status==='in_session'?'active':today.status==='completed'?'done':''}">
+      <div class="today-top">
+        <span class="eyebrow">TODAY · ${(today.date||'').replace(/^\d{4}-/,'').replace('-','/')}</span>
+        <span class="today-status">${today.status==='ready'?'未开始':today.status==='in_session'?'进行中':today.status==='completed'?'已完成':'待定'}</span>
+      </div>
+      <p class="today-kicker">${dd.exam?.today?.day_type ? '考试时段 · '+dd.exam.today.day_type : '考试时段复习'}</p>
+      <h2>${esc(today.topic||'（暂无安排）')}</h2>
+      <p class="today-meta">${today.meta ? esc(today.meta) : ''}${today.estimated_minutes ? ' · 预计 '+today.estimated_minutes+' 分钟' : ''}</p>
+      ${today.status==='ready' ? `
+      <div class="time-choice">
+        ${[30,45,60].map(m=>`<button class="${(today.estimated_minutes||45)===m?'selected':''}" onclick="updateToday(${m})">${m} min</button>`).join('')}
+      </div>` : ''}
+      <button class="primary-action" onclick="toast('📖 请在 Hermes 中说「开始学习」进入课程')">
+        ${today.status==='ready'?'开始今天的学习':today.status==='in_session'?'继续学习':'查看今日总结'}
+        <span>→</span>
+      </button>
+    </article>
+  </section>
+
+  <section class="week-strip card">
+    <div class="week-title"><span class="eyebrow">THIS WEEK</span><b>${completedDays} 天完成 ${week.filter(d=>d.status==='completed').length} 次</b></div>
+    <div class="days-grid">
+      ${week.map(d=>{
+        let cls = d.status||'';
+        let mark = d.status==='completed'?`${d.actual_minutes||0}m`:d.status==='today'?'今':'休';
+        return `<div class="day-cell ${cls}"><span>周${DAY_MAP[new Date(d.date).getDay()===0?6:new Date(d.date).getDay()-1]}</span><b>${d.date.slice(5)}</b><div class="day-mark">${mark}</div></div>`;
+      }).join('')}
+    </div>
+    <div class="streak-copy">
+      <strong>连续 ${stats.streak_days||0} 天</strong>
+      <span>比“每天都学”更重要的是，断了一天还能回来。</span>
+    </div>
+  </section>
+
+  ${renderExamCard()}
+
+  <div class="section-heading">
+    <div><span class="eyebrow">ROADMAP</span><h2>你的路线，正在跟着你变化</h2></div>
+    <button class="text-button" onclick="switchView('roadmap')">展开完整路线 →</button>
+  </div>
+
+  ${renderRoadmapPreview()}
+
+  <div class="dashboard-grid">
+    <article class="insight-card card">
+      <div class="card-header">
+        <div><span class="eyebrow violet">HERMES NOTICED</span><h3>开始认识你的学习方式</h3></div>
+        <span class="week-badge">D${ov.current_day||0}</span>
+      </div>
+      <div class="insight-list">
+        <div class="insight-row"><span class="insight-number">01</span><div><small>学习模式</small><b>（数据收集中）</b><p>完成几次学习后，Hermes 会开始识别你的最佳时段和有效方式。</p></div></div>
+        <div class="insight-row"><span class="insight-number">02</span><div><small>知识掌握</small><b>（待评估）</b><p>开始学习后，掌握度会基于你的练习表现自动更新。</p></div></div>
+        <div class="insight-row"><span class="insight-number">03</span><div><small>待验证</small><b>（开启学习后观察）</b><p>新发现会先作为假设记录，持续验证后再确认。</p></div></div>
+      </div>
+      <button class="secondary-action" onclick="switchView('weekly')">查看学习报告 <span>→</span></button>
+    </article>
+
+    <article class="mastery-card card">
+      <div class="card-header" style="display:flex;justify-content:space-between;"><div><span class="eyebrow">MASTERY</span><h3 style="font-size:21px;">知识掌握度</h3></div><b class="large-stat">${pct}</b></div>
+      <div class="mastery-list" id="mastery-bars">
+        ${Object.keys(md?.topics||{}).length ? Object.entries(md.topics).map(([k,v])=>`
+          <div class="mastery-item"><div><span>${esc(k)}</span><b>${v.score||0}%</b></div><div class="bar"><span class="${v.status==='learning'?'learning':v.status==='review'?'review':''}" style="width:${v.score||0}%"></span></div></div>
+        `).join('') : '<p class="muted" style="margin-top:20px;">（开始学习后自动更新）</p>'}
+      </div>
+      <p class="microcopy">不是看完就算会。掌握度来自复述、练习和隔天回测。</p>
+    </article>
+
+    <article class="mistakes-card card">
+      <div class="card-header" style="display:flex;justify-content:space-between;"><div><span class="eyebrow coral">REVIEW QUEUE</span><h3 style="font-size:21px;">错题本</h3></div><span class="count-badge">${dd?.wrong_questions_count||0}</span></div>
+      <div class="mistake-list" id="mistake-mini">
+        ${(dd?.wrong_questions_count||0)===0 ? '<p class="muted" style="margin-top:20px;">（暂无错题 — 继续保持！）</p>' : ''}
+      </div>
+      <button class="text-button mistake-link" onclick="switchView('mistakes')">查看全部错题 →</button>
+    </article>
+
+    <article class="quote-card card">
+      <span class="eyebrow">SELF NOTE</span>
+      <blockquote>“开始之前，<br>先认识自己。”</blockquote>
+      <p>完成首次采访后，这里会记录你自己发现的最重要的学习习惯。</p>
+      <div class="quote-footer"><span>来自首次采访</span><span>影响整个学习计划</span></div>
+    </article>
+  </div>`;
+}
+
+function renderExamCard() {
+  const ex = dd.exam || {};
+  const today = ex.today || null;
+  const daily = ex.daily || [];
+  const statusMap = {pending:'未开始', in_progress:'进行中', paused:'已暂停', completed:'已完成'};
+  const todaySlots = (today && today.slots) ? today.slots : [];
+  return `<section class="exam-card card">
+    <div class="exam-head">
+      <div><span class="eyebrow">EXAM SLOTS</span><h3>考试时段 · 每日完成情况</h3></div>
+      ${today ? `<span class="day-pill">${esc(today.day_type||'')} · ${esc(today.date||'')}</span>` : ''}
+    </div>
+    ${todaySlots.length ? todaySlots.map(s=>`
+      <div class="exam-slot">
+        <span class="exam-time">${esc(s.start||'')}–${esc(s.end||'')}</span>
+        <div class="exam-subj"><b>${esc(s.subject||'')}整套模考</b><span>${esc(s.task||'')}</span></div>
+        <div class="exam-pct">
+          <b>${s.completion_pct||0}%</b>
+          <small>${s.actual_minutes||0}/${s.planned_minutes||180} 分钟</small>
+          <div class="exam-progress"><span style="width:${Math.min(100,s.completion_pct||0)}%"></span></div>
+        </div>
+      </div>`).join('') : '<p class="exam-empty">今天暂无考试时段安排。</p>'}
+    ${daily.length ? `
+    <table class="exam-daily-table">
+      <thead><tr><th>日期</th><th>时段</th><th>科目</th><th>完成</th><th>状态</th></tr></thead>
+      <tbody>
+        ${daily.slice(0,7).map(d=>d.slots.map(s=>`
+          <tr>
+            <td><b>${esc(d.date||'')}</b> ${esc(d.day_type||'')}</td>
+            <td>${esc(s.slot==='am'?'上午':'下午')}</td>
+            <td>${esc(s.subject||'')}</td>
+            <td>${s.actual_minutes||0}/${s.planned_minutes||180} 分钟 · ${s.completion_pct||0}%</td>
+            <td><span class="exam-status-chip ${esc(s.status||'pending')}">${statusMap[s.status]||'未开始'}</span></td>
+          </tr>`).join('')).join('')}
+      </tbody>
+    </table>` : '<p class="exam-empty">还没有考试记录。每日 8:30 / 14:00 开始提醒，11:30 / 17:00 自动结算并记录完成度。</p>'}
+  </section>`;
+}
+
+function renderRoadmapPreview() {
+  if (!rd?.phases?.length) return `<div class="card empty" style="padding:40px;"><div class="icon">🗺</div><p>Roadmap 尚未生成</p><p style="color:var(--muted);">完成首次采访后自动生成</p></div>`;
+
+  const phase = rd.phases[rd.phases.findIndex(p=>p.status==='active')] || rd.phases[0];
+  const tasks = (rd.tasks||[]).filter(t=>t.phase_id===phase.id||t.phase===phase.index);
+  const done = tasks.filter(t=>t.status==='completed').length;
+
+  return `<section class="roadmap-preview card">
+    <div class="preview-week-head">
+      <div><b>${esc(phase.title||'')}</b><span>${esc(phase.subtitle||'')}</span></div>
+      <span class="week-progress">${done} / ${tasks.length} 天</span>
+    </div>
+    <div class="preview-days-path">
+      ${tasks.slice(0,7).map(t=>{
+        let cls = t.status||'pending';
+        let dot = t.status==='completed'?'✓':t.day||'?';
+        return `<div class="preview-day ${cls}" onclick="switchView('roadmap')">
+          <span class="path-dot">${dot}</span><small>DAY ${t.day||'?'}</small>
+          <b>${esc(t.title||'')}</b><em>${esc(t.topic||'')} · ${t.status==='completed'?`${t.actual_minutes||t.estimated_minutes||'?'}m`:'待完成'}</em>
+        </div>`;
+      }).join('')}
+    </div>
+    ${(dd?.roadmap_changes||[]).length ? `
+    <div class="change-note">
+      <span class="change-icon">↳</span>
+      <div><b>Hermes 调整了路线</b><p>${esc(dd.roadmap_changes.slice(-1)[0]||'')}</p></div>
+    </div>` : ''}
+  </section>`;
+}
+
+function renderRoadmap() {
+  if (!rd?.phases?.length) return `<div class="card empty" style="padding:60px;"><div class="icon">🗺</div><p>Roadmap 尚未生成</p></div>`;
+
+  return `<section class="detail-view">
+    <div class="section-heading">
+      <div><span class="eyebrow">FULL ROADMAP</span><h2>${esc(rd.title||'学习路线')}</h2><p>共 ${rd.phases.length} 个阶段 · ${rd.metadata?.total_planned_days||'?'} 天 · ${rd.metadata?.total_planned_minutes||0} 分钟</p></div>
+      <span class="updated-chip">🕐 ${fmtDT(rd.metadata?.updated_at)}</span>
+    </div>
+    <div class="roadmap-stage-summary">
+      ${rd.phases.map((p,i)=>{
+        let cls = p.status||'upcoming';
+        let tasks = (rd.tasks||[]).filter(t=>t.phase_id===p.id||t.phase===i);
+        let done = tasks.filter(t=>t.status==='completed').length;
+        let pct = tasks.length?Math.round(done/tasks.length*100):0;
+        return `<div class="stage-summary ${cls}" onclick="toast('阶段 ${i+1}: ${esc(p.title)}')">
+          <span>阶段 ${String(i+1).padStart(2,'0')}</span><b>${esc(p.title||'')}</b>
+          <small>${esc(p.subtitle||'')}</small><em>${pct}%</em>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="roadmap-timeline">
+      ${rd.phases.map((p,i)=>{
+        let tasks = (rd.tasks||[]).filter(t=>t.phase_id===p.id||t.phase===i);
+        let isCurrent = p.status==='active';
+        return `<article class="roadmap-week card ${isCurrent?'current':''}">
+          <div class="roadmap-week-head">
+            <div class="week-index"><b>P${String(i+1).padStart(2,'0')}</b><span>第${i+1}阶段</span></div>
+            <div><small>阶段目标</small><h3>${esc(p.title||'')}</h3></div>
+            ${isCurrent?'<span class="current-week-chip">正在进行</span>':''}
+          </div>
+          <div class="roadmap-days-grid">
+            ${tasks.map(t=>{
+              let cls = t.status||'pending';
+              return `<div class="roadmap-day-card ${cls}">
+                <div><span>DAY ${String(t.day||'?').padStart(2,'0')}</span><em>${esc(t.topic||'概念')}</em></div>
+                <b>${esc(t.title||'')}</b><small>${t.actual_minutes||t.estimated_minutes||'?'} min</small>
+                ${t.status==='moved'?'<i>由前日顺延</i>':t.status==='review'?'<i>需要巩固</i>':t.status==='today'?'<i>今天</i>':''}
+              </div>`;
+            }).join('')}
+          </div>
+        </article>`;
+      }).join('')}
+    </div>
+    <article class="adjustment-log card">
+      <span class="eyebrow violet">ADJUSTMENT LOG</span><h3>路线为什么改变</h3>
+      ${(dd?.roadmap_changes||[]).length ? dd.roadmap_changes.map(c=>`<div class="log-row"><time>调整</time><b>${esc(c)}</b><p></p></div>`).join('')
+      : '<p class="muted" style="padding:20px 0;">（开始学习后，每次 Roadmap 调整都会记录在这里）</p>'}
+    </article>
+  </section>`;
+}
+
+function renderMistakes() {
+  // Wrong questions will come from mastery data and daily records
+  return `<section class="mistakes-view detail-view">
+    <div class="section-heading">
+      <div><span class="eyebrow coral">MISTAKE BOOK</span><h2>错题不是收藏，是下一次真的会做</h2><p>每一条都保留原题、我的答案、错因、正确理解和下次复习时间。</p></div>
+      <span class="updated-chip coral-chip">共 ${dd?.wrong_questions_count||0} 条</span>
+    </div>
+    <div class="card empty" style="padding:60px;">
+      <div class="icon">✨</div>
+      <p style="font-size:18px;font-weight:600;">还没有错题记录</p>
+      <p style="color:var(--muted);margin-top:8px;">开始学习后，练习中答错的题目会自动归档到这里，按知识主题分类，追踪复习进度。</p>
+    </div>
+  </section>`;
+}
+
+function heatLevel(day) {
+  if (!day || !day.total) return 0;
+  if (day.done === 0) return 1;
+  const m = day.min || 0;
+  if (m < 30) return 2;
+  if (m < 90) return 3;
+  return 4;
+}
+
+function renderHeatmap() {
+  const tasks = (rd && rd.tasks) || [];
+  const cyc = (dd && dd.current_cycle) || {};
+  if (!tasks.length && !cyc.start_date) return '';
+  // 按日期聚合每日任务数据
+  const daily = {};
+  let minD = null, maxD = null;
+  tasks.forEach(t => {
+    const d = t.date;
+    if (!d) return;
+    if (!minD || d < minD) minD = d;
+    if (!maxD || d > maxD) maxD = d;
+    daily[d] = daily[d] || { total:0, done:0, min:0 };
+    daily[d].total++;
+    if (t.status === 'completed') daily[d].done++;
+    daily[d].min += (t.actual_minutes || t.estimated_minutes || 0);
+  });
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0,10);
+  const startD = cyc.start_date || minD;
+  const endD = cyc.cycle_end_date || (maxD && maxD > todayStr ? maxD : todayStr);
+  // 从 startD 所在周的周一开始
+  const start = new Date(startD + 'T00:00:00');
+  const end = new Date(endD + 'T00:00:00');
+  const dow = (start.getDay() + 6) % 7; // 周一=0
+  const gridStart = new Date(start);
+  gridStart.setDate(start.getDate() - dow);
+  // 逐天生成格子（顺序=周一..周日逐列）
+  const cells = [];
+  const cur = new Date(gridStart);
+  while (cur <= end) {
+    const ds = cur.toISOString().slice(0,10);
+    const day = daily[ds];
+    const lv = heatLevel(day);
+    const tip = ds + (day ? ` · ${day.done}/${day.total} 完成 · ${day.min}分钟` : (ds < todayStr ? ' · 未学习' : ' · 未开始'));
+    cells.push(`<div class="heat-cell h${lv}${ds===todayStr?' today':''}" title="${tip}"></div>`);
+    cur.setDate(cur.getDate() + 1);
+  }
+  return `<section class="heatmap-card card">
+    <div class="heatmap-head">
+      <div><span class="eyebrow">HEATMAP</span><h3>学习热力图</h3></div>
+      <span class="day-pill">${startD} → ${endD}</span>
+    </div>
+    <div class="heatmap-wrap"><div class="heatmap">${cells.join('')}</div></div>
+    <div class="heat-tip">
+      <div class="heat-legend">
+        <i></i>无安排 <i class="h1"></i>未完成 <i class="h2"></i>完成 <i class="h3"></i>较多 <i class="h4"></i>大量
+      </div>
+      <span style="font-size:12px;color:var(--muted);">紫框 = 今天 · 悬停格子看详情</span>
+    </div>
+  </section>`;
+}
+
+function renderWeekly() {
+  return `<section class="weekly-view">
+    ${renderHeatmap()}
+    <div class="weekly-hero card">
+      <div><span class="eyebrow">WEEKLY REVIEW</span><h2>先复盘知识，再复盘表现</h2><p>不是“看过哪些”，而是哪些能讲清、哪些会用、哪些必须回头。</p></div>
+      <div class="weekly-score"><strong>—</strong><span>知识掌握</span></div>
+    </div>
+    <div class="weekly-stats">
+      <article class="card"><small>本周投入</small><b>0h</b><span>尚未开始学习</span></article>
+      <article class="card"><small>任务完成</small><b>0 / 0</b><span>等待 Roadmap</span></article>
+      <article class="card"><small>平均掌握</small><b>—</b><span>开始学习后计算</span></article>
+      <article class="card"><small>有效连续</small><b>0 天</b><span>等待首次打卡</span></article>
+    </div>
+    <div class="card knowledge-review">
+      <div class="card-header">
+        <div><span class="eyebrow">KNOWLEDGE REVIEW</span><h3 style="font-size:26px;">本周知识点复盘</h3><p>不是“看过哪些”，而是哪些能讲清、哪些会用、哪些必须回头。</p></div>
+      </div>
+      <p class="muted" style="padding:30px 0;text-align:center;">完成一周学习后自动生成</p>
+    </div>
+    <div class="performance-grid">
+      <article class="performance-card good card">
+        <span class="eyebrow">WHAT WENT WELL</span><h3>这周做得好的</h3>
+        <p class="muted">（完成一周学习后自动汇总）</p>
+      </article>
+      <article class="performance-card improve card">
+        <span class="eyebrow coral">WHAT NEEDS WORK</span><h3>这周没做好的</h3>
+        <p class="muted">（完成一周学习后自动汇总）</p>
+      </article>
+    </div>
+    <div class="weekly-grid">
+      <article class="pattern-report card">
+        <span class="eyebrow violet">YOUR LEARNING PATTERNS</span><h3>Hermes 观察到的模式</h3>
+        <div class="hypothesis-note"><b>数据收集中。</b><p>完成一周学习后，系统会从你的记录中识别规律，帮助你更好地认识自己的学习方式。</p></div>
+      </article>
+      <article class="next-week-card card">
+        <span class="eyebrow">NEXT WEEK · PRIORITIES</span><h3>下周学习重点</h3>
+        <p class="muted" style="padding:20px 0;">（完成本周学习后自动生成）</p>
+      </article>
+    </div>
+  </section>`;
+}
+
+function updateToday(mins) {
+  if (dd?.today) dd.today.estimated_minutes = mins;
+  switchView('overview');
+  toast('✅ 今日可用时间已更新为 ' + mins + ' 分钟');
+}
+
+document.querySelectorAll('#nav button').forEach(btn => {
+  btn.addEventListener('click', () => switchView(btn.dataset.v));
+});
+
+init();
+</script>
+</body>
+</html>
