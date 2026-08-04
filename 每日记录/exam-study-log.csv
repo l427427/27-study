@@ -1,0 +1,3 @@
+﻿date,day_type,slot,subject,task,planned_minutes,actual_minutes,completion_pct,status,started_at,ended_at,reason
+2026-08-04,A日,am,数学,数学整套模考,180,0,0,paused,2026-08-04 15:35:55,2026-08-04 15:35:55,时段结束，自动暂停并切换下一科目
+2026-08-04,A日,pm,英语,英语整套模考,180,0,0,paused,2026-08-04 15:35:56,2026-08-04 17:00:32,时段结束，自动暂停并切换下一科目

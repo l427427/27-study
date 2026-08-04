@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-03",
+  "date": "2026-08-04",
   "day_type": "A日",
   "slots": [
     {
@@ -9,12 +9,12 @@
       "subject": "数学",
       "task": "数学整套模考",
       "planned_minutes": 180,
-      "status": "pending",
+      "status": "paused",
       "actual_minutes": 0,
       "completion_pct": 0,
-      "started_at": "",
-      "ended_at": "",
-      "reason": ""
+      "started_at": "2026-08-04 15:35:55",
+      "ended_at": "2026-08-04 15:35:55",
+      "reason": "时段结束，自动暂停并切换下一科目"
     },
     {
       "slot": "pm",
@@ -23,14 +23,14 @@
       "subject": "英语",
       "task": "英语整套模考",
       "planned_minutes": 180,
-      "status": "pending",
+      "status": "paused",
       "actual_minutes": 0,
       "completion_pct": 0,
-      "started_at": "",
-      "ended_at": "",
-      "reason": ""
+      "started_at": "2026-08-04 15:35:56",
+      "ended_at": "2026-08-04 17:00:32",
+      "reason": "时段结束，自动暂停并切换下一科目"
     }
   ],
   "active_slot": null,
-  "updated_at": "2026-08-04T11:30:00+08:00"
+  "updated_at": "2026-08-04T17:00:32.312325+08:00"
 }
