@@ -452,6 +452,14 @@ async function init() {
 
 function esc(s) { if(!s) return ''; const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
+function fmtDT(s) {
+  if(!s) return '';
+  const d = new Date(s);
+  if(isNaN(d)) return s;
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
 function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
 function switchView(v) {
@@ -661,7 +669,7 @@ function renderRoadmap() {
   return `<section class="detail-view">
     <div class="section-heading">
       <div><span class="eyebrow">FULL ROADMAP</span><h2>${esc(rd.title||'学习路线')}</h2><p>共 ${rd.phases.length} 个阶段 · ${rd.metadata?.total_planned_days||'?'} 天 · ${rd.metadata?.total_planned_minutes||0} 分钟</p></div>
-      <span class="updated-chip">🕐 ${rd.metadata?.updated_at||''}</span>
+      <span class="updated-chip">🕐 ${fmtDT(rd.metadata?.updated_at)}</span>
     </div>
     <div class="roadmap-stage-summary">
       ${rd.phases.map((p,i)=>{
