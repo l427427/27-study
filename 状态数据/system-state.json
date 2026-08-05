@@ -7,21 +7,21 @@
     "goal_summary": "上岸",
     "cycle_start_date": "2026-07-31",
     "cycle_total_days": 148,
-    "current_day": 4
+    "current_day": 5
   },
   "today_session": {
-    "date": "2026-08-04",
+    "date": "2026-08-05",
     "status": "in_session",
     "actual_minutes_available": 480,
-    "started_at": "2026-08-04T09:00:00",
+    "started_at": "2026-08-05T09:00:00",
     "current_stage": "opening",
     "completed_topics": []
   },
   "last_session": {
-    "date": null,
-    "status": null,
-    "ended_at_stage": null,
+    "date": "2026-08-04",
+    "status": "in_session",
+    "ended_at_stage": "opening",
     "last_topic": null
   },
-  "updated_at": "2026-08-04T23:10:00"
+  "updated_at": "2026-08-05T09:22:00"
 }
