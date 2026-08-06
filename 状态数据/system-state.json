@@ -7,21 +7,21 @@
     "goal_summary": "上岸",
     "cycle_start_date": "2026-07-31",
     "cycle_total_days": 148,
-    "current_day": 5
+    "current_day": 6
   },
   "today_session": {
-    "date": "2026-08-05",
+    "date": "2026-08-06",
     "status": "in_session",
     "actual_minutes_available": 480,
-    "started_at": "2026-08-05T08:30:00",
+    "started_at": "2026-08-06T10:00:00",
     "current_stage": "opening",
     "completed_topics": []
   },
   "last_session": {
-    "date": "2026-08-03",
-    "status": "in_session",
-    "ended_at_stage": "opening",
-    "last_topic": null
+    "date": "2026-08-05",
+    "status": "missed",
+    "ended_at_stage": "no_session",
+    "last_topic": "Anki卡片美化"
   },
-  "updated_at": "2026-08-05T12:50:00"
+  "updated_at": "2026-08-06T10:05:00"
 }
