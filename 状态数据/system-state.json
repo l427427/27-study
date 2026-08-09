@@ -7,21 +7,21 @@
     "goal_summary": "上岸",
     "cycle_start_date": "2026-07-31",
     "cycle_total_days": 148,
-    "current_day": 6
+    "current_day": 9
   },
   "today_session": {
-    "date": "2026-08-06",
+    "date": "2026-08-09",
     "status": "in_session",
-    "actual_minutes_available": 480,
-    "started_at": "2026-08-06T10:00:00",
+    "actual_minutes_available": 430,
+    "started_at": "2026-08-09T09:00:00",
     "current_stage": "opening",
     "completed_topics": []
   },
   "last_session": {
-    "date": "2026-08-05",
-    "status": "missed",
-    "ended_at_stage": "no_session",
-    "last_topic": "Anki卡片美化"
+    "date": "2026-08-06",
+    "status": "no_report",
+    "ended_at_stage": "opening",
+    "last_topic": "408进度校准（王道已看5讲，从第6讲续排）"
   },
-  "updated_at": "2026-08-06T10:05:00"
+  "updated_at": "2026-08-09T10:30:00"
 }

@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-08-09T08:54:44Z",
+  "generated_at": "2026-08-09T13:00:30Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -11,9 +11,9 @@
     "current_cycle": "27考研",
     "cycle_start_date": "2026-07-31",
     "total_cycle_days": 148,
-    "current_day": 6,
-    "days_remaining": 142,
-    "progress_percentage": 4
+    "current_day": 9,
+    "days_remaining": 139,
+    "progress_percentage": 6
   },
   "tasks": {
     "total_tasks": 112,
@@ -62,14 +62,14 @@
   "phases": {
     "phase-1": {
       "title": "集训前抢跑",
-      "status": "active",
+      "status": "closed",
       "date_range": "7/31 — 8/8",
       "total_days": 9,
       "completed_percentage": 0
     },
     "phase-2": {
       "title": "暑期集训期",
-      "status": "upcoming",
+      "status": "active",
       "date_range": "8/9 — 8/27",
       "total_days": 19,
       "completed_percentage": 0
@@ -97,10 +97,10 @@
     }
   },
   "recent_activities": {
-    "last_session_date": "2026-08-05",
+    "last_session_date": "2026-08-06",
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-08-09T08:54:44Z"
+    "last_update": "2026-08-09T13:00:30Z"
   },
   "status": "ready"
 }
