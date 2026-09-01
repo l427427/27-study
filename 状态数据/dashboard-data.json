@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-08-09T13:00:30Z",
+  "generated_at": "2026-09-01T12:41:19Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -11,33 +11,33 @@
     "current_cycle": "27考研",
     "cycle_start_date": "2026-07-31",
     "total_cycle_days": 148,
-    "current_day": 9,
-    "days_remaining": 139,
-    "progress_percentage": 6
+    "current_day": 30,
+    "days_remaining": 118,
+    "progress_percentage": 20
   },
   "tasks": {
-    "total_tasks": 112,
-    "pending_tasks": 112,
+    "total_tasks": 205,
+    "pending_tasks": 205,
     "completed_tasks": 0,
-    "overdue_tasks": 54
+    "overdue_tasks": 115
   },
   "subjects": {
     "英语": {
-      "total_tasks": 38,
+      "total_tasks": 69,
       "completed_tasks": 0,
-      "pending_tasks": 38,
+      "pending_tasks": 69,
       "completion_percentage": 0
     },
     "数学": {
-      "total_tasks": 18,
+      "total_tasks": 49,
       "completed_tasks": 0,
-      "pending_tasks": 18,
+      "pending_tasks": 49,
       "completion_percentage": 0
     },
     "408": {
-      "total_tasks": 28,
+      "total_tasks": 59,
       "completed_tasks": 0,
-      "pending_tasks": 28,
+      "pending_tasks": 59,
       "completion_percentage": 0
     },
     "政治": {
@@ -69,14 +69,14 @@
     },
     "phase-2": {
       "title": "暑期集训期",
-      "status": "active",
+      "status": "closed",
       "date_range": "8/9 — 8/27",
       "total_days": 19,
       "completed_percentage": 0
     },
     "phase-3": {
       "title": "408攻坚 + 数学强化",
-      "status": "upcoming",
+      "status": "active",
       "date_range": "8/28 — 9/30",
       "total_days": 34,
       "completed_percentage": 0
@@ -100,7 +100,7 @@
     "last_session_date": "2026-08-06",
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-08-09T13:00:30Z"
+    "last_update": "2026-09-01T12:41:19Z"
   },
   "status": "ready"
 }
