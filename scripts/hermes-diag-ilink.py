@@ -64,7 +64,7 @@ def api_post(base_url, endpoint, payload, token, timeout=15):
 
 
 def main():
-    mode = sys.argv[1] if len(sys.argv) > 1 else "both"
+    mode = sys.argv[1].lstrip("-") if len(sys.argv) > 1 else "both"
     env = load_env(ENV_PATH)
     account_id = env.get("WEIXIN_ACCOUNT_ID", "")
     token = env.get("WEIXIN_TOKEN", "")

@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-09-10T10:00:16Z",
+  "generated_at": "2026-09-17T04:08:18Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -11,15 +11,15 @@
     "current_cycle": "27考研",
     "cycle_start_date": "2026-07-31",
     "total_cycle_days": 148,
-    "current_day": 38,
-    "days_remaining": 110,
-    "progress_percentage": 26
+    "current_day": 44,
+    "days_remaining": 104,
+    "progress_percentage": 30
   },
   "tasks": {
     "total_tasks": 205,
     "pending_tasks": 205,
     "completed_tasks": 0,
-    "overdue_tasks": 142
+    "overdue_tasks": 163
   },
   "subjects": {
     "英语": {
@@ -97,10 +97,10 @@
     }
   },
   "recent_activities": {
-    "last_session_date": "2026-08-06",
+    "last_session_date": "2026-09-03",
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-09-10T10:00:16Z"
+    "last_update": "2026-09-17T04:08:18Z"
   },
   "status": "ready"
 }
