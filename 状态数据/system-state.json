@@ -1,18 +1,18 @@
 {
   "system_version": "1.0.0",
-  "current_status": "in_session",
+  "current_status": "day_closed",
   "current_project": {
     "id": "kaoyan-2027",
     "title": "27考研",
     "goal_summary": "上岸",
     "cycle_start_date": "2026-07-31",
     "cycle_total_days": 148,
-    "current_day": 48
+    "current_day": 51
   },
   "today_session": {
-    "date": "2026-09-17",
+    "date": "2026-09-20",
     "status": "day_closed",
-    "actual_minutes_available": 0,
+    "actual_minutes_available": 390,
     "started_at": null,
     "current_stage": "review_maintenance",
     "completed_topics": []
@@ -23,5 +23,5 @@
     "ended_at_stage": "user_initiated",
     "last_topic": "用户主动消息：最近都没有继续完成任务 / 从头开始任务吧（2 条回复投递失败，至今未送达）"
   },
-  "updated_at": "2026-09-17T12:22:00"
+  "updated_at": "2026-09-20T10:05:00"
 }
