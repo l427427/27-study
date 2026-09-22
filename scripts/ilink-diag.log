@@ -4,3 +4,4 @@
 2026-09-17 21:00 | send-only | http=200 ms=1695 ret=-2 prepare failed | 出站故障第20天(8/28起)，同日第2次探测，签名不变；用户侧零新增入站(最新真实入站=9/3)
 2026-09-20 10:02 | send-only | http=200 ms=804 ret=-2 prepare failed | 未恢复(签名不变)
 2026-09-21 09:00 | send-only | http=200 ms=770 ret=-2 prepare failed | 未恢复(签名不变)
+2026-09-22 09:01 | send-only | http=200 ms=780 ret=-2 prepare failed | 未恢复(签名不变)
