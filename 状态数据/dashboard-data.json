@@ -1,6 +1,6 @@
 {
   "dashboard_version": "1.0.0",
-  "generated_at": "2026-09-28T01:00:07Z",
+  "generated_at": "2026-09-28T03:00:08Z",
   "summary": {
     "total_study_minutes": 0,
     "consecutive_days": 0,
@@ -11,9 +11,9 @@
     "current_cycle": "27考研",
     "cycle_start_date": "2026-07-31",
     "total_cycle_days": 148,
-    "current_day": 58,
-    "days_remaining": 90,
-    "progress_percentage": 39
+    "current_day": 59,
+    "days_remaining": 89,
+    "progress_percentage": 40
   },
   "tasks": {
     "total_tasks": 205,
@@ -100,7 +100,7 @@
     "last_session_date": "2026-09-03",
     "last_session_minutes": null,
     "last_topic_completed": null,
-    "last_update": "2026-09-28T01:00:07Z"
+    "last_update": "2026-09-28T03:00:08Z"
   },
   "status": "ready"
 }
