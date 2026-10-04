@@ -16,3 +16,4 @@
 2026-10-01 09:00 | send-only | http=200 ms=773 ret=-2 prepare failed | 未恢复(签名不变)
 2026-10-02 09:01 | send-only | http=200 ms=771 ret=-2 prepare failed | 未恢复(签名不变)
 2026-10-03 09:00 | send-only | http=200 ms=760 ret=-2 prepare failed | 未恢复(签名不变)
+2026-10-04 09:00 | send-only | http=200 ms=794 ret=-2 prepare failed | 未恢复(签名不变)
