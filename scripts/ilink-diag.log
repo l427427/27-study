@@ -27,3 +27,5 @@
 2026-10-12 09:01 | send-only | http=200 ms=1006 ret=-2 prepare failed | 未恢复(签名不变)
 2026-10-13 09:00 | send-only | http=200 ms=742 ret=-2 prepare failed | 未恢复(签名不变)
 2026-10-14 09:02 | send-only | http=200 ms=801 ret=-2 prepare failed | 未恢复(签名不变)
+2026-10-15 21:01 | send-only | http=200 ms=912 ret=?  | 通道恢复(可补发积压)
+2026-10-15 21:06 | raw-send 复核 | http=200 ms=929 raw={"message_id":7516483674502934408} | 恢复确认(裸脚本拿到 message_id, 非 ret=-2; 包装器此行 ret=? 系响应体无 ret 字段)；同日上午 10:47 gateway 已成功发出 1 条(其 10:46 入站回复, 无 send failed 行)
