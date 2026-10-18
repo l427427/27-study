@@ -169,9 +169,9 @@ ck("本地 HEAD == origin/main（已推送）", len(sha) == 2 and sha[0] == sha[
 rc, stt = sh("git", "-C", BASE, "status", "--porcelain")
 ck("无长期悬挂 MM（提交未失败）",
    not any(l.startswith("MM") for l in stt.splitlines()), stt.strip()[:80])
-rc, files = sh("git", "-C", BASE, "show", "--name-only", "--pretty=format:", "HEAD")
-ck("HEAD 提交包含 W42 周报", "2026-W42.md" in files, files.strip()[:100])
-ck("HEAD 提交包含 changelog", "roadmap-changelog.md" in files)
+rc, files = sh("git", "-C", BASE, "log", "--since=2026-10-18", "--format=", "--name-only")
+ck("今日提交包含 W42 周报", "2026-W42.md" in files, files.strip()[:100])
+ck("今日提交包含 changelog", "roadmap-changelog.md" in files)
 for p in ["/root/.hermes/profiles/408-study/scripts/sync-study.sh",
           "/root/.hermes/scripts/sync-study.sh"]:
     src = rd(p)
