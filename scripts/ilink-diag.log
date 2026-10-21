@@ -38,3 +38,4 @@
 2026-10-19 21:00 | 投递异常+晚间补位 | 09:00 早班正文已生成但投递失败: gateway.log 2026-10-19 09:01:11 / 09:01:16 [Weixin] send failed(cooldown 600s / 120s); jobs.json 0d34337730f8 last_delivery_error 即该条限流原文 -> 早班未送达; 09:00 send-only 探测 http=200 ret=-2 prepare failed = 通道仍在故障期 | 动作: 晚间 job 补位发正文并认领早班未送达; 未跑第二次探测(一天一次); 未改 roadmap / 未重排(等用户确认)、未伪造完成; 事实: tasks_total=205 backlog=181 今日0任务 排期到期第19天 completed=0 真人入站0条(最近 10/15 10:46「我还没有开始」)
 2026-10-20 09:00 | send-only | http=200 ms=766 ret=-2 prepare failed | 未恢复(签名不变)
 2026-10-20 21:00 | 投递异常+晚间补位 | 09:00 早班正文已生成(363字)但投递失败: gateway.log 2026-10-20 09:01:01 / 09:01:06 [Weixin] send failed(cooldown 600s / 120s); jobs.json 0d34337730f8 last_delivery_error 即该条限流原文 -> 早班未送达; 今日探测 09:00 ret=-2 prepare failed 未恢复; 真人入站仍停在 2026-10-15; 晚间补位发正文
+2026-10-21 09:00 | send-only | http=200 ms=773 ret=-2 prepare failed | 未恢复(签名不变)
